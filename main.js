@@ -7,7 +7,7 @@ function renderArc(config){
     var degreeScale = d3.scale.linear().range([0,360]);
     var data=[];
 
-    var stateOne;
+    var stateOne = dataset[0]["screen_state"] == "Y" ? "N" : "Y";
     var stateTwo;
     var timeOne
     var timeOneDegree;
@@ -40,9 +40,6 @@ function renderArc(config){
         for(var i=0; i<filtered_dataset.length-1;i++){
             timeTwo = filtered_dataset[i]["activity_at"];
             stateTwo = filtered_dataset[i]["screen_state"];
-            if(timeTwo>end_date){
-                break;
-            }
 
             if(stateTwo==stateOne){
                 continue;
@@ -50,12 +47,15 @@ function renderArc(config){
 
             timeOneDegree = degreeScale(timeOne);
             timeTwoDegree = degreeScale(timeTwo);
-            timeOne = timeTwo;
-            stateOne = stateTwo;
 
             data.push([timeOneDegree,timeTwoDegree,stateOne,innerRadius]);
+
+            timeOne = timeTwo;
+            stateOne = stateTwo;
         }
-        var finalState = stateOne == "Y" ? "N" : "Y";
+
+//      var finalState = stateOne == "Y" ? "N" : "Y";
+        var finalState = stateOne;
         data.push([timeTwoDegree,360,finalState,innerRadius]);
 
         innerRadius += barThickness;
