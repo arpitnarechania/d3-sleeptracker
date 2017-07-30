@@ -5,22 +5,23 @@ function renderArc(config){
     .style("height", config.height + config.margin.top + config.margin.bottom);
 
     var degreeScale = d3.scale.linear().range([0,360]);
+
+    var barThickness = 5;
+    var millis_in_1_day = 3600*24*1000;
+
     var data=[];
 
     var stateOne = dataset[0]["screen_state"] == "Y" ? "N" : "Y";
     var stateTwo;
     var timeOne
     var timeOneDegree;
-    var innerRadius = 50;
+    var innerRadius = 100;
 
     var timeTwo;
     var timeTwoDegree;
 
     var start_date;
     var end_date;
-    var barThickness = 8;
-
-    var millis_in_1_day = 3600*24*1000;
 
     for(var j=0;j<30;j++){
         start_date = 1496275200000 + j*millis_in_1_day;
@@ -30,14 +31,14 @@ function renderArc(config){
             return item["activity_at"] <= end_date && item["activity_at"] >= start_date;
         });
 
-        stateOne = filtered_dataset[0]["screen_state"] == "Y" ? "N" : "Y";
+        // stateOne = filtered_dataset[0]["screen_state"] == "Y" ? "N" : "Y";
         timeOne = filtered_dataset[0]["activity_at"];
         timeOneDegree = degreeScale(timeOne);
 
         degreeScale.domain([start_date,end_date]);
         data.push([0,timeOneDegree,stateOne,innerRadius]);
 
-        for(var i=0; i<filtered_dataset.length-1;i++){
+        for(var i=0; i<filtered_dataset.length;i++){
             timeTwo = filtered_dataset[i]["activity_at"];
             stateTwo = filtered_dataset[i]["screen_state"];
 
@@ -54,10 +55,7 @@ function renderArc(config){
             stateOne = stateTwo;
         }
 
-//      var finalState = stateOne == "Y" ? "N" : "Y";
-        var finalState = stateOne;
-        data.push([timeTwoDegree,360,finalState,innerRadius]);
-
+        data.push([timeTwoDegree,360,stateOne,innerRadius]);
         innerRadius += barThickness;
     }
 
