@@ -1,4 +1,5 @@
 function renderArc(config){
+    var dataset = dataset_sai_june;
 
     var svg = d3.select(config.dom_element).append("svg")
     .style("width", config.width + config.margin.left + config.margin.right)
@@ -23,13 +24,22 @@ function renderArc(config){
     var start_date;
     var end_date;
 
-    for(var j=0;j<30;j++){
-        start_date = 1496275200000 + j*millis_in_1_day;
+    var july_1 = 1498867200000;
+    var june_1 = 1496275200000;
+    var may_1 = 1493596800000;
+
+    for(var j=0;j<31;j++){
+        start_date = june_1 + j*millis_in_1_day;
         end_date = start_date + millis_in_1_day;
 
         filtered_dataset = dataset.filter(function(item){
             return item["activity_at"] <= end_date && item["activity_at"] >= start_date;
         });
+
+        if(filtered_dataset.length==0){
+            console.log(filtered_dataset.length);
+            continue;
+        }
 
         // stateOne = filtered_dataset[0]["screen_state"] == "Y" ? "N" : "Y";
         timeOne = filtered_dataset[0]["activity_at"];
