@@ -1,4 +1,4 @@
-function renderArc(config){
+function renderBarCode(config){
     var dataset = dataset_sai_june;
 
     var svg = d3.select(config.dom_element).append("svg")
